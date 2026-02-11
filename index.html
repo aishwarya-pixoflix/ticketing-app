@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Startup Ticket Board</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Startup Ticket Board</h1>
+      <p>Lightweight JIRA-style tracker for client issues and requests.</p>
+    </header>
+
+    <main>
+      <section class="panel">
+        <h2>Create Ticket</h2>
+        <form id="ticket-form" class="ticket-form">
+          <label>
+            Title
+            <input type="text" id="title" required maxlength="80" />
+          </label>
+          <label>
+            Client
+            <input type="text" id="client" required maxlength="60" />
+          </label>
+          <label>
+            Description
+            <textarea id="description" rows="3" maxlength="300"></textarea>
+          </label>
+          <div class="form-row">
+            <label>
+              Priority
+              <select id="priority">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+                <option value="Critical">Critical</option>
+              </select>
+            </label>
+            <label>
+              Assignee
+              <input type="text" id="assignee" placeholder="e.g. Aisha" maxlength="40" />
+            </label>
+          </div>
+          <p class="form-hint">Tip: drag ticket cards between columns to change status quickly.</p>
+          <button type="submit">Add Ticket</button>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Filters</h2>
+          <button type="button" id="clear-filters" class="ghost-button">Clear Filters</button>
+        </div>
+        <div class="filters">
+          <input type="search" id="search" placeholder="Search title/client/ID" />
+          <select id="status-filter">
+            <option value="All">All Statuses</option>
+            <option value="Backlog">Backlog</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Review">Review</option>
+            <option value="Done">Done</option>
+          </select>
+          <select id="priority-filter">
+            <option value="All">All Priorities</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Overview</h2>
+          <button type="button" id="reset-board" class="danger-outline">Reset Board</button>
+        </div>
+        <div id="summary" class="summary-grid"></div>
+      </section>
+
+      <section class="board" id="board"></section>
+    </main>
+
+    <template id="ticket-template">
+      <article class="ticket-card" draggable="true">
+        <div class="ticket-head">
+          <h3 class="ticket-title"></h3>
+          <span class="ticket-id"></span>
+        </div>
+        <p class="ticket-description"></p>
+        <ul class="ticket-meta"></ul>
+        <div class="ticket-actions">
+          <select class="status-select">
+            <option value="Backlog">Backlog</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Review">Review</option>
+            <option value="Done">Done</option>
+          </select>
+          <button class="edit-button" type="button">Edit</button>
+          <button class="delete-button" type="button">Delete</button>
+        </div>
+      </article>
+    </template>
+
+    <dialog id="edit-dialog">
+      <form id="edit-form" class="ticket-form" method="dialog">
+        <h3>Edit Ticket</h3>
+        <input type="hidden" id="edit-id" />
+        <label>
+          Title
+          <input type="text" id="edit-title" required maxlength="80" />
+        </label>
+        <label>
+          Client
+          <input type="text" id="edit-client" required maxlength="60" />
+        </label>
+        <label>
+          Description
+          <textarea id="edit-description" rows="3" maxlength="300"></textarea>
+        </label>
+        <div class="form-row">
+          <label>
+            Priority
+            <select id="edit-priority">
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+              <option value="Critical">Critical</option>
+            </select>
+          </label>
+          <label>
+            Assignee
+            <input type="text" id="edit-assignee" maxlength="40" />
+          </label>
+        </div>
+        <div class="dialog-actions">
+          <button type="submit">Save</button>
+          <button type="button" id="cancel-edit" class="ghost-button">Cancel</button>
+        </div>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
